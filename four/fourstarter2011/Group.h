@@ -10,18 +10,20 @@
 
 #include "Object3D.h"
 
-class Group : public Object3D
-{
+class Group : public Object3D {
 
-public:
-   Group(int numObjects);
-   int numObjects;
-   Object3D *objects; // ARRAY SOMEHOW
-   
-   void addObject(int index, Object3D* obj);
-   bool intersect(const Ray& r, Hit& h, float tmin);
+    public:
+       Group(int numObjects);
+       int numObjects;
+       Object3D* objects;
+
+       void addObject(int index, Object3D *obj);
+       
+       
+       bool intersect(const Ray& r, Hit& h, float tMin);
    
 };
+
 
 #endif	/* GROUP_H */
 

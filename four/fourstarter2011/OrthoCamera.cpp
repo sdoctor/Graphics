@@ -26,7 +26,8 @@ OrthographicCamera::OrthographicCamera(Vector3f img_center, Vector3f direction, 
     this->horiz = horiz_vec;
     this->direction = direction;
     
-    this->tmin = FLT_MIN;
+    this->tmin = -FLT_MAX
+            ;
     
 }
 
