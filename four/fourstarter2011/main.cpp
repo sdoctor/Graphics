@@ -85,7 +85,46 @@ int main( int argc, char* argv[] )
     //        5) writes the color of the closest intersected object
     
     
-    SceneParser parser = SceneParser(input_filename);
+    // read the scene using SceneParser
+    SceneParser* parser = new SceneParser(input_filename);
+    Camera* camera = parser->getCamera();
+    Group* group = parser->getGroup();
+    // backgroundColor = parser->getBackgroudColor() 
+    // etc...
+    
+    
+    // Loop over pixels in the image plane
+    Image* img = new Image(scene_width, scene_height);
+    
+    for (int i = 0; i < scene_width; i++) 
+    {
+        for (int j = 0; j < scene_height; j++) 
+        {
+            // Generate ray using cmaera class
+            Hit hit = Hit(); // is this supposed to be something more...profound?
+            float tmin = camera->getTMin();
+            
+            Vector2f pixel = Vector2f(i, j);
+            Ray ray = camera->generateRay(pixel);
+            
+            // intersect the ray with the high level group for the scene
+            if (group->intersect(ray, hit, tmin))
+            {
+                //update shit? or was that done in Group.intersect? before it returned true...bc it called each itnersect method...
+                // write color of the closest intersected object
+                Material* material = hit.getMaterial();
+                Vector3f color = material->getDiffuseColor();
+                img->SetPixel(i, j, color);
+            }
+            
+        }      
+    }
+    
+    
+    
+
+    
+    
     
     
     // First, parse the scene using SceneParser.
