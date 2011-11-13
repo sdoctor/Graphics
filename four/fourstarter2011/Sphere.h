@@ -18,6 +18,7 @@ public:
     float radius;
     
     bool intersect(const Ray& r, Hit& h, float tmin);
+    Vector3f calculateNormal(Vector3f surface_point);
 };
 
 #endif	/* SPHERE_H */

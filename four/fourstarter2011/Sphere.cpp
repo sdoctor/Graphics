@@ -47,10 +47,20 @@ bool Sphere::intersect(const Ray& r, Hit& h, float tmin)
    
            
    if (t >= tmin && t < h.getT()) {
+       Vector3f surface_point = Vector3f(b, c, d); // QUESTION: this is wrong...
        // update Hit and Material
-       h.set(t, mat, h.getNormal());
+       h.set(t, mat, calculateNormal(surface_point));
+       return true;
    }
    
    return false; // placeholder
    
+}
+
+Vector3f Sphere::calculateNormal(Vector3f surface_point)
+{
+    // normal is just vector from center to point, normalized
+    Vector3f distance_vec = surface_point - center_point;
+    Vector3f normal = distance_vec.normalized() + distance_vec;
+    return normal;
 }
