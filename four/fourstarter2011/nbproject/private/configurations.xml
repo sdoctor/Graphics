@@ -28,8 +28,13 @@
       <runprofile version="9">
         <runcommandpicklist>
           <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
+          <runcommandpicklistitem>"$ ./a4 -input scene1_01.txt -size 200 200 -output output1_01.tga -depth 9 10 depth1_01.tga"</runcommandpicklistitem>
+          <runcommandpicklistitem>"$./a4 -input scene1_01.txt -size 200 200 -output output1_01.tga -depth 9 10 depth1_01.tga"</runcommandpicklistitem>
+          <runcommandpicklistitem>"a4 -input scene1_01.txt -size 200 200 -output output1_01.tga -depth 9 10 depth1_01.tga"</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH} -input scene1_01.txt -size 200 200 -output output1_01.tga -depth 9 10 depth1_01.tga"</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" -input scene1_01.txt -size 200 200 -output output1_01.tga -depth 9 10 depth1_01.tga</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}"</runcommand>
+        <runcommand>"${OUTPUT_PATH}" -input scene1_01.txt -size 200 200 -output output1_01.tga -depth 9 10 depth1_01.tga</runcommand>
         <rundir>.</rundir>
         <buildfirst>true</buildfirst>
         <terminal-type>0</terminal-type>

@@ -15,7 +15,7 @@ class Group : public Object3D {
     public:
        Group(int numObjects);
        int numObjects;
-       Object3D* objects;
+       Object3D** objects;
 
        void addObject(int index, Object3D *obj);
        

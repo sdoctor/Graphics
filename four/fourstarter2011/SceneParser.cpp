@@ -26,6 +26,7 @@ SceneParser::SceneParser(const char* filename) {
     assert(!strcmp(ext,".txt"));
     file = fopen(filename,"r");
     assert (file != NULL);
+    cout << "Now parsing file in SceneParser" << endl;
     parseFile();
     fclose(file); 
     file = NULL;
@@ -86,6 +87,7 @@ void SceneParser::parseFile() {
 // ====================================================================
 
 void SceneParser::parseOrthographicCamera() {
+    cout << "Parsing ortho camera" << endl;
     char token[MAX_PARSER_TOKEN_LENGTH];
     // read in the camera parameters
     getToken(token); assert (!strcmp(token, "{"));
@@ -103,6 +105,7 @@ void SceneParser::parseOrthographicCamera() {
 
 
 void SceneParser::parsePerspectiveCamera() {
+    cout << "Parsing persp camera" << endl;
     char token[MAX_PARSER_TOKEN_LENGTH];
     // read in the camera parameters
     getToken(token); assert (!strcmp(token, "{"));
@@ -120,6 +123,7 @@ void SceneParser::parsePerspectiveCamera() {
 }
 
 void SceneParser::parseBackground() {
+    cout << "parsing background" << endl;
     char token[MAX_PARSER_TOKEN_LENGTH];
     // read in the background color
     getToken(token); assert (!strcmp(token, "{"));    
@@ -142,6 +146,7 @@ void SceneParser::parseBackground() {
 // ====================================================================
 
 void SceneParser::parseLights() {
+    cout << "parsing lights" << endl;
     char token[MAX_PARSER_TOKEN_LENGTH];
     getToken(token); assert (!strcmp(token, "{"));
     // read in the number of objects
@@ -165,6 +170,7 @@ void SceneParser::parseLights() {
 
 
 Light* SceneParser::parseDirectionalLight() {
+    cout << "parsing direcitonal light" << endl;
     char token[MAX_PARSER_TOKEN_LENGTH];
     getToken(token); assert (!strcmp(token, "{"));
     getToken(token); assert (!strcmp(token, "direction"));
@@ -179,6 +185,7 @@ Light* SceneParser::parseDirectionalLight() {
 // ====================================================================
 
 void SceneParser::parseMaterials() {
+    cout << "PARSING MATERIALS'" << endl;
     char token[MAX_PARSER_TOKEN_LENGTH];
     getToken(token); assert (!strcmp(token, "{"));
     // read in the number of objects
@@ -203,6 +210,7 @@ void SceneParser::parseMaterials() {
 
 
 Material* SceneParser::parseMaterial() {
+    cout << "PARSING INDIVIDUAL MATERIAL" << endl;
     char token[MAX_PARSER_TOKEN_LENGTH];
     Vector3f diffuseColor(1,1,1);
     float exponent = 1;
@@ -224,10 +232,12 @@ Material* SceneParser::parseMaterial() {
 // ====================================================================
 
 Object3D* SceneParser::parseObject(char token[MAX_PARSER_TOKEN_LENGTH]) {
+    cout << "parsing object" << endl;
     Object3D *answer = NULL;
     if (!strcmp(token, "Group")) {            
         answer = (Object3D*)parseGroup();
-    } else if (!strcmp(token, "Sphere")) {            
+    } else if (!strcmp(token, "Sphere")) {   
+        cout << "trying to add sphere" << endl;
         answer = (Object3D*)parseSphere();
     } else if (!strcmp(token, "Plane")) {            
         answer = (Object3D*)parsePlane();
@@ -256,6 +266,7 @@ Group* SceneParser::parseGroup() {
     // until the next material index (scoping for the materials is very
     // simple, and essentially ignores any tree hierarchy)
     //
+    cout << "parsing group" << endl;
     char token[MAX_PARSER_TOKEN_LENGTH];
     getToken(token); assert (!strcmp(token, "{"));
 
@@ -291,6 +302,7 @@ Group* SceneParser::parseGroup() {
 // ====================================================================
 
 Sphere* SceneParser::parseSphere() {
+    cout << "parsing sphere" << endl;
     char token[MAX_PARSER_TOKEN_LENGTH];
     getToken(token); assert (!strcmp(token, "{"));
     getToken(token); assert (!strcmp(token, "center"));
@@ -304,6 +316,7 @@ Sphere* SceneParser::parseSphere() {
 
 
 Plane* SceneParser::parsePlane() {
+    cout << "parsing plane" << endl;
     char token[MAX_PARSER_TOKEN_LENGTH];
     getToken(token); assert (!strcmp(token, "{"));
     getToken(token); assert (!strcmp(token, "normal"));
@@ -317,6 +330,7 @@ Plane* SceneParser::parsePlane() {
 
 
 Triangle* SceneParser::parseTriangle() {
+    cout << "PARsing triangle" << endl;
     char token[MAX_PARSER_TOKEN_LENGTH];
     getToken(token); assert (!strcmp(token, "{"));
     getToken(token); 
@@ -334,6 +348,7 @@ Triangle* SceneParser::parseTriangle() {
 }
 
 Group* SceneParser::parseTriangleMesh() {
+    cout << "parsing mesh" << endl;
     char token[MAX_PARSER_TOKEN_LENGTH];
     char filename[MAX_PARSER_TOKEN_LENGTH];
     // get the filename
@@ -399,6 +414,7 @@ Group* SceneParser::parseTriangleMesh() {
 
 
 Transform* SceneParser::parseTransform() {
+    cout << "parsing transform" << endl;
     char token[MAX_PARSER_TOKEN_LENGTH];
     Matrix4f matrix = Matrix4f::identity();
     Object3D *object = NULL;

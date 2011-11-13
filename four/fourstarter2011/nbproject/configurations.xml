@@ -2,6 +2,16 @@
 <configurationDescriptor version="79">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df name="fourstarter2011" root=".">
+      <df name="a4.dSYM">
+        <df name="Contents">
+          <df name="Resources">
+            <df name="DWARF">
+              <in>a4</in>
+            </df>
+          </df>
+          <in>Info.plist</in>
+        </df>
+      </df>
       <in>Camera.h</in>
       <in>Group.cpp</in>
       <in>Group.h</in>
@@ -51,7 +61,7 @@
           <buildCommandWorkingDir>.</buildCommandWorkingDir>
           <buildCommand>${MAKE} -f Makefile</buildCommand>
           <cleanCommand>${MAKE} -f Makefile clean</cleanCommand>
-          <executablePath>main.o</executablePath>
+          <executablePath>a4</executablePath>
           <ccTool>
             <incDir>
               <pElem>../../vecmath</pElem>

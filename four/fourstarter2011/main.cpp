@@ -20,7 +20,6 @@ int main( int argc, char* argv[] )
 {
     // Fill in your implementation here.
     
-    
     // Things we get from the input arguments
     const char* input_filename;
     int scene_height;
@@ -29,8 +28,9 @@ int main( int argc, char* argv[] )
     int depth_min;
     int depth_max;
     const char* depth_output_filename;
-    const char* normals_filename;
+    const char* normals_output_filename;
     
+    cout << "All variables declared in main..." << endl;
 
     // This loop loops over each of the input arguments.
     // argNum is initialized to 1 because the first
@@ -70,13 +70,13 @@ int main( int argc, char* argv[] )
         if (string(argv[argNum]) == "-normals")
         {
             assert (argNum+3 <= argc && "Did not specify enough arguments for flag -depth (should have 3)");
-            normals_filename = argv[argNum+1];
+            normals_output_filename = argv[argNum+1];
             argNum+=1;
         }
         
     }
     
-
+    cout << "Input arguments parsed" << endl;
     // From the handout: Write a main function that:
     //    1) reads the scene (using the parsing code provided)
     //    2) loops over the pixesl in the image plane
@@ -96,7 +96,9 @@ int main( int argc, char* argv[] )
     // Loop over pixels in the image plane
     Image* img = new Image(scene_width, scene_height);
     Image* depth_img = new Image(scene_width, scene_height);
+    Image* normals_img = new Image(scene_width, scene_height);
     
+    cout << "now starting to produce image" << endl;
     for (int i = 0; i < scene_width; i++) 
     {
         for (int j = 0; j < scene_height; j++) 
@@ -122,13 +124,22 @@ int main( int argc, char* argv[] )
                 // Visualize Depth (QUESTION: should this be a separate routine?
                 // I don't think so because all of the tests also have depth 
                 // but this can be commented out for testing if it doesn't work...
-            
-                float depth_val = hit.getT();
-                if (depth_val >= depth_min && depth_val <= depth_max)
+                if (depth_output_filename != NULL)
                 {
-                    // QUESTION: how to make Vector3f of the color?
-                    depth_img->SetPixel(i, j, Vector3f(depth_val, depth_val, depth_val));
+                    float depth_val = hit.getT();
+                    if (depth_val >= depth_min && depth_val <= depth_max)
+                    {
+                        // QUESTION: how to make Vector3f of the color?
+                        depth_img->SetPixel(i, j, Vector3f(depth_val, depth_val, depth_val));
+                    }
                 }
+                
+                if (normals_output_filename != NULL)
+                {
+                    Vector3f normal = hit.getNormal();
+                    normals_img->SetPixel(i, j, normal); // QUESTION: just color the normal?
+                }
+                    
             } 
             else
             {
@@ -143,6 +154,7 @@ int main( int argc, char* argv[] )
         }      
     }
     
+    
     // Instructions for Depth:
     // Implement a second rendering style to visualize the depth t of
     // objects in the scene. Two input depth values specify the range
@@ -150,9 +162,25 @@ int main( int argc, char* argv[] )
     // the visualization. Depth values outside this range = clamped
     
     
+    // Instructions for Normals:
+    // Implement a new rendering mode, normal visualization
     
     
     
+    
+    // Write outfiles!
+    cout << "images produced, writing outfiles" << endl;
+    img->SaveTGA(output_filename);
+    if (depth_output_filename != NULL)
+    {
+        depth_img->SaveTGA(depth_output_filename);
+    }
+    if (normals_output_filename != NULL)
+    {
+        normals_img->SaveTGA(normals_output_filename);
+
+    }
+           
     
 
     return 0;
