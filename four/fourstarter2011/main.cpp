@@ -141,11 +141,10 @@ int main( int argc, char* argv[] )
                         float distanceToLight = 10.0;
                         light->getIllumination(p, dir, col, distanceToLight); // wht should distance to light actually be?
                                                 cout << "after getIllum: dir = " << dir[0] << dir[1] << dir[2] << endl;
-                        cout << "after getILLUM; col = " << col[0] << col[1] << col[2] << endl;
                         
                         float coeff = Vector3f::dot(hit.getNormal().normalized(), dir.normalized());
                         //coeff = 0.1;
-                        color += material->getDiffuseColor() * coeff;
+                        color += material->getDiffuseColor() * col * coeff;
                         
                         cout << "Coeff: " << coeff << endl;
                         
