@@ -9,14 +9,13 @@
 #define	ORTHOCAMERA_H
 
 #include "Camera.h"
-#include "vecmath.h"
 
 class OrthoBasis
 {
 public:
-    OrthoBasis(Vector3f point, Vector3f up, Vector3f horiz, Vector3f direction);
+    OrthoBasis(Vector3f img_center, Vector3f up, Vector3f horiz, Vector3f direction);
     
-    Vector3f point;
+    Vector3f img_center;
     Vector3f up;
     Vector3f horiz;
     Vector3f direction;

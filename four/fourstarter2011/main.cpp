@@ -22,8 +22,8 @@ int main( int argc, char* argv[] )
     
     // Things we get from the input arguments
     const char* input_filename;
-    int scene_height;
-    int scene_width;
+    int img_height;
+    int img_width;
     const char* output_filename;
     int depth_min;
     int depth_max;
@@ -49,8 +49,8 @@ int main( int argc, char* argv[] )
         if (string(argv[argNum]) == "-size")
         {
             assert (argNum+2 <= argc && "Did not specify enough arguments for flag -size"); // make sure there is something after the flag
-            scene_height = atoi(argv[argNum+1]);
-            scene_width = atoi(argv[argNum+2]);
+            img_height = atoi(argv[argNum+1]);
+            img_width = atoi(argv[argNum+2]);
             argNum += 2;
         }
         if (string(argv[argNum]) == "-output")
@@ -94,41 +94,48 @@ int main( int argc, char* argv[] )
     
     
     // Loop over pixels in the image plane
-    Image* img = new Image(scene_width, scene_height);
-    Image* depth_img = new Image(scene_width, scene_height);
-    Image* normals_img = new Image(scene_width, scene_height);
+    Image* img = new Image(img_width, img_height);
+    Image* depth_img = new Image(img_width, img_height);
+    Image* normals_img = new Image(img_width, img_height);
     
     cout << "now starting to produce image" << endl;
-    for (int i = 0; i < scene_width; i++) 
+    cout << "tmin = " << camera->getTMin();
+    for (int i = 0; i < img_width; i++) 
     {
-        for (int j = 0; j < scene_height; j++) 
+        for (int j = 0; j < img_height; j++) 
         {
+//            cout << "for pixel " << i << "," << j << ": ";
             // Generate ray using cmaera class
-            Hit hit = Hit(); // is this supposed to be something more...profound?
             float tmin = camera->getTMin();
+            Hit hit = Hit(FLT_MAX, NULL, NULL); // is this supposed to be something more...profound?
             
-            Vector2f pixel = Vector2f(i, j);
+            // we want it to map from (-1,-1) to (1,1)
+            float x = (2.0/img_width)*(float)i - 1.0;
+            float y = (2.0/img_height)*(float)j - 1.0;
+            Vector2f pixel = Vector2f(x, y);
+
             Ray ray = camera->generateRay(pixel);
             
             // intersect the ray with the high level group for the scene
             if (group->intersect(ray, hit, tmin))
             {
-                //update shit? or was that done in Group.intersect? before it returned true...bc it called each itnersect method...
                 // write color of the closest intersected object
                 Material* material = hit.getMaterial();
                 Vector3f color = material->getDiffuseColor();
-                img->SetPixel(i, j, color);
-                
-                
+//                cout << "writing intersect color" << endl;
+                img->SetPixel(i, j, color);                
                 
                 // Visualize Depth (QUESTION: should this be a separate routine?
                 // I don't think so because all of the tests also have depth 
                 // but this can be commented out for testing if it doesn't work...
                 if (depth_output_filename != NULL)
                 {
-                    float depth_val = hit.getT();
-                    if (depth_val >= depth_min && depth_val <= depth_max)
+                    float t = hit.getT();
+                    
+                    if (t >= depth_min && t <= depth_max)
                     {
+                        float depth_val = (depth_max - t)/(depth_max - depth_min);
+//                        cout << "depth_val = " << depth_val << endl;
                         // QUESTION: how to make Vector3f of the color?
                         depth_img->SetPixel(i, j, Vector3f(depth_val, depth_val, depth_val));
                     }
@@ -143,8 +150,9 @@ int main( int argc, char* argv[] )
             } 
             else
             {
+//                cout << "writing background color" << endl;
                 img->SetPixel(i, j, background_color);
-                depth_img->SetPixel(i, j, Vector3f(0,0,0));
+                depth_img->SetPixel(i, j, background_color);
             }
             
             

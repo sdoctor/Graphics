@@ -10,6 +10,7 @@
 #include "vecmath.h"
 #include "Ray.h"
 #include "float.h"
+#include <vector>
 
 class Camera {
 public:
@@ -21,6 +22,11 @@ public:
    
    virtual Ray generateRay( const Vector2f& point ) = 0;
    virtual float getTMin() const = 0;
+   
+   void print_initialized()
+   {
+       cout << "intialized camera:" << this << "WIth tmin=" << tmin << endl;
+   }
 };
 
 

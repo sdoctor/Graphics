@@ -21,6 +21,11 @@ class Group : public Object3D {
        
        
        bool intersect(const Ray& r, Hit& h, float tMin);
+       
+       void print_initialized()
+       {
+           cout << "initialied group:" << this << endl;
+       }
    
 };
 

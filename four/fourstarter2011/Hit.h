@@ -57,6 +57,11 @@ public:
         material = m;
         normal = n;
     }
+    
+    void print_initialized()
+    {
+        cout << "initialized hit:" << this << endl;
+    }
 
 private: 
 

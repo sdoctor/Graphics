@@ -39,6 +39,11 @@ public:
     {
         return origin + direction * t;
     }
+    
+    void print_initialized() const // have to put the const there?
+    {
+        cout << "Initialzed ray:" << this << endl;
+    }
 
 private:
 

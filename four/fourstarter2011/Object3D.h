@@ -9,6 +9,10 @@
 #define	OBJECT3D_H
 
 #include "Hit.h"
+#include "float.h"
+#include <vector> 
+
+//extern float EPSILON;// = 0.000001; // is this a good epsilon? -- do we even need epsilon??
 
 class Object3D
 {
