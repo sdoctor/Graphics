@@ -8,11 +8,18 @@
 #ifndef TRANSFORM_H
 #define	TRANSFORM_H
 
-class Transform
+#include "Object3D.h"
+
+
+class Transform //: public Object3D
 {
 public:
     Transform(Matrix4f matrix, Object3D* object)
     {}
+//    Matrix4f matrix;
+//    Object3D* object;
+//    
+//    bool intersect(const Ray& r, Hit& h, float tmin);
 };
 
 #endif	/* TRANSFORM_H */

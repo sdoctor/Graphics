@@ -17,7 +17,9 @@ class PerspectiveCamera : public Camera
     Vector3f center;
     Vector3f direction;
     Vector3f up;
-    float angle_radians;
+    Vector3f horiz;
+    float angle;
+    Vector3f img_center;
 
     Ray generateRay(const Vector2f& point );
     float getTMin() const;

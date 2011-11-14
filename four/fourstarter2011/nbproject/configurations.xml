@@ -6,10 +6,8 @@
         <df name="Contents">
           <df name="Resources">
             <df name="DWARF">
-              <in>a4</in>
             </df>
           </df>
-          <in>Info.plist</in>
         </df>
       </df>
       <in>Camera.h</in>
@@ -32,6 +30,7 @@
       <in>SceneParser.h</in>
       <in>Sphere.cpp</in>
       <in>Sphere.h</in>
+      <in>Transform.cpp</in>
       <in>Transform.h</in>
       <in>Triangle.cpp</in>
       <in>Triangle.h</in>

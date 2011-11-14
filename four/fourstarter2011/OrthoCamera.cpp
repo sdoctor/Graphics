@@ -2,15 +2,6 @@
 
 
 
-OrthoBasis::OrthoBasis(Vector3f point, Vector3f up, Vector3f horiz, Vector3f direction)
-{
-    
-    this->img_center = point;
-    this->up = up;
-    this->horiz = horiz;
-    this->direction = direction;
-    
-}
 
 OrthographicCamera::OrthographicCamera(Vector3f img_center, Vector3f direction, Vector3f up_vec, float img_size):Camera()
 {
@@ -22,13 +13,13 @@ OrthographicCamera::OrthographicCamera(Vector3f img_center, Vector3f direction, 
 //    
     
     Vector3f horiz_vec = Vector3f::cross(up_vec, direction);
-    Vector3f ortho_up = Vector3f::cross(horiz_vec, direction);
+    Vector3f ortho_up = Vector3f::cross(direction, horiz_vec);
     
     //this->basis = basis;
     this->img_center = img_center;
     this->up = ortho_up.normalized();
     this->horiz = horiz_vec.normalized();
-    this->direction = direction;
+    this->direction = direction.normalized();
     
     this->tmin = -FLT_MAX;
             
@@ -52,7 +43,7 @@ Ray OrthographicCamera::generateRay(const Vector2f& point )
     // need to map that onto -1, -1 -> 1, 1
               
         
-    Vector3f ray_point =  img_center + point[0]*img_size*up + point[1]*img_size*horiz;
+    Vector3f ray_point =  img_center + point.x()*(img_size/2.0)*horiz + point.y()*(img_size/2.0)*up;
     Ray r = Ray(ray_point, direction);
     return r;
     
@@ -67,18 +58,4 @@ float OrthographicCamera::getTMin() const
 }
 
 
-Vector3f OrthographicCamera::proj(Vector3f u, Vector3f v)
-// gets the projection of v onto u
-{
-    float numer = Vector3f::dot(u, v);
-    float denom = Vector3f::dot(u, u);
-    float multiply = numer/denom;
-    return multiply*u;
-}
-
-Vector3f OrthographicCamera::getUpVec(Vector3f direction, Vector3f orig_up) 
-{
-   Vector3f ortho_up = orig_up - proj(direction, orig_up);
-   return ortho_up.normalized();
-}
 

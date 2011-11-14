@@ -67,11 +67,11 @@ bool Sphere::intersect(const Ray& r, Hit& h, float tmin)
 //   cout << "    t1 =" << t1 << ", t2 = " << t2 << endl;
    // get the closest positive (smaller of the two)
    float t_curr = tmin;
-   if (t1 > t2 and t1 > 0)
+   if (t1 > t2)
    {
        t_curr = t2;
    }
-   else if (t1 < t2 and t2 > 0)
+   else if (t1 < t2)
    {
        t_curr = t1;
    }
@@ -95,7 +95,7 @@ bool Sphere::intersect(const Ray& r, Hit& h, float tmin)
    if (t_curr > tmin && t_curr < h.getT()) {
        // calculate normal = Q/||Q||
        Vector3f Q = Ro + t_curr*Rd;
-       Vector3f normal = Q/Q.normalized();
+       Vector3f normal = Q/Q.abs();
        
        cout << "sphere center = " << center_point[0] << center_point[1] << center_point[2] << endl;
        // update Hit and Material

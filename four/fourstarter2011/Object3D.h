@@ -11,6 +11,7 @@
 #include "Hit.h"
 #include "float.h"
 #include <vector> 
+#include "vecmath.h"
 
 //extern float EPSILON;// = 0.000001; // is this a good epsilon? -- do we even need epsilon??
 

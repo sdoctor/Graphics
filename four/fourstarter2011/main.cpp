@@ -69,7 +69,7 @@ int main( int argc, char* argv[] )
         }
         if (string(argv[argNum]) == "-normals")
         {
-            assert (argNum+3 <= argc && "Did not specify enough arguments for flag -depth (should have 3)");
+            assert (argNum+1 <= argc && "Did not specify enough arguments for flag -normals (should have 1)");
             normals_output_filename = argv[argNum+1];
             argNum+=1;
         }
@@ -121,9 +121,49 @@ int main( int argc, char* argv[] )
             {
                 // write color of the closest intersected object
                 Material* material = hit.getMaterial();
-                Vector3f color = material->getDiffuseColor();
+                if (parser->getNumLights() == 0)
+                {
+                    Vector3f color = material->getDiffuseColor();
 //                cout << "writing intersect color" << endl;
-                img->SetPixel(i, j, color);                
+                    img->SetPixel(i, j, color); 
+                }
+                else
+                {
+                    Vector3f color(0,0,0);//material->getDiffuseColor();
+                    for (int k = 0; k < parser->getNumLights(); k++)
+                    {
+                        Light* light = parser->getLight(k);
+                        
+//                        Vector3f col = parser.getAmbientLight();
+                        Vector3f p = ray.pointAtParameter(hit.getT());
+                        Vector3f dir;
+                        Vector3f col;
+                        float distanceToLight = 10.0;
+                        light->getIllumination(p, dir, col, distanceToLight); // wht should distance to light actually be?
+                                                cout << "after getIllum: dir = " << dir[0] << dir[1] << dir[2] << endl;
+                        cout << "after getILLUM; col = " << col[0] << col[1] << col[2] << endl;
+                        
+                        float coeff = Vector3f::dot(hit.getNormal().normalized(), dir.normalized());
+                        //coeff = 0.1;
+                        color += material->getDiffuseColor() * coeff;
+                        
+                        cout << "Coeff: " << coeff << endl;
+                        
+                        //float denom = dir.abs()*hit.getNormal().abs();
+                        //float angle_between = Vector3f::dot(dir, hit.getNormal())/denom;
+//                        angle_between = angle_between*180.0/6.28;
+//                        cout << "angle between = " << angle_between << endl;
+                        
+                        //float to_add = Vector3f::dot(dir, hit.getNormal());
+                       //Vector3f irradiance = angle_between*col;
+                       //cout << "irradiance = " << irradiance[0] << irradiance[1] << irradiance[2] << endl;
+                       
+                       //cout << "to_add = " << to_add << endl;
+                       //color -= Vector3f(to_add/10.0, to_add/10.0, to_add/10.0);
+                    }
+                    img->SetPixel(i, j, color);
+                }
+                               
                 
                 // Visualize Depth (QUESTION: should this be a separate routine?
                 // I don't think so because all of the tests also have depth 
@@ -138,6 +178,12 @@ int main( int argc, char* argv[] )
 //                        cout << "depth_val = " << depth_val << endl;
                         // QUESTION: how to make Vector3f of the color?
                         depth_img->SetPixel(i, j, Vector3f(depth_val, depth_val, depth_val));
+                    
+                    
+                    }
+                    else 
+                    {
+                        depth_img->SetPixel(i, j, Vector3f(0,0,0));
                     }
                 }
                 
