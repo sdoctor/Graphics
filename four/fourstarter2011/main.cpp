@@ -157,12 +157,12 @@ int main( int argc, char* argv[] )
                     d = -d;
                     cout << "d = " << d << endl;
                     // if t is within the correct range
-                    float depth_range = (float)depth_max - (float)depth_min;
                     cout << "depthMin = " << depth_min << ", depth max = " << depth_max << endl;
-                    if (d > (float)depth_min && d <= (float)depth_max)
+                    if (d >= depth_min && d <= depth_max)
                     {
-                        float depth_val = (depth_max - d)/(depth_max - depth_min);;
+                        float depth_val = (depth_max - d)/(depth_max - depth_min);
                         cout << "depth val = " << depth_val << endl;
+                        depth_val = 1-depth_val;
                         depth_img->SetPixel(i, j, Vector3f(depth_val, depth_val, depth_val));
                     }
                 }
