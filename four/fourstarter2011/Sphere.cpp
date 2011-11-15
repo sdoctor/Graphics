@@ -24,7 +24,7 @@ bool Sphere::intersect(const Ray& r, Hit& h, float tmin)
 //    cout << "in sphere:: intersect" << endl;
     
     // QUESTION: how to translate??
-   Vector3f Ro = r.getOrigin() + center_point;
+   Vector3f Ro = r.getOrigin() - center_point;
    Vector3f Rd = r.getDirection();
    // explicit equation of ray => P(t) = Ro + t*Rd
    
@@ -93,6 +93,7 @@ bool Sphere::intersect(const Ray& r, Hit& h, float tmin)
    if (t_curr > tmin && t_curr < h.getT()) {
        // calculate normal = Q/||Q||
        Vector3f Q = Ro + t_curr*Rd;
+       Q -= center_point;
        Vector3f normal = Q/Q.abs();
        
        // update Hit and Material

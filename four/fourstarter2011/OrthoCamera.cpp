@@ -17,9 +17,9 @@ OrthographicCamera::OrthographicCamera(Vector3f img_center, Vector3f direction, 
     
     //this->basis = basis;
     this->img_center = img_center;
-    this->up = -ortho_up.normalized();
-    this->horiz = -horiz_vec.normalized();
-    this->direction = -direction.normalized();
+    this->up = ortho_up.normalized();
+    this->horiz = horiz_vec.normalized();
+    this->direction = direction.normalized();
     
     this->tmin = -FLT_MAX;
             
@@ -54,7 +54,7 @@ Ray OrthographicCamera::generateRay(const Vector2f& point )
 float OrthographicCamera::getTMin() const
 // useful when tracing rays through the scene
 {
-    return tmin;
+    return -FLT_MAX;
 }
 
 

@@ -29,7 +29,7 @@ Materials {
 
 Group {
     numObjects 6
-    MaterialIndex 0
+MaterialIndex 0
     Sphere {
 	center 0 0 0 
         radius 1 
@@ -52,6 +52,7 @@ Group {
 	center 1 -1 -1 
         radius 0.75 
     }
+    
     MaterialIndex 3
     Plane {
 	normal 0 1 0

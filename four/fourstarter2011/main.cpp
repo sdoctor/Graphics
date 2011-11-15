@@ -100,18 +100,20 @@ int main( int argc, char* argv[] )
     
     cout << "now starting to produce image" << endl;
     cout << "camera's tmin = " << camera->getTMin() << endl;
-    for (int i = 0; i < img_width; i++) 
+    for (int j = 0; j < img_height; j++) 
     {
-        for (int j = 0; j < img_height; j++) 
+        for (int i = 0; i < img_width; i++) 
         {
 //            cout << "for pixel " << i << "," << j << ": ";
             // Generate ray using cmaera class
             float tmin = camera->getTMin();
             Hit hit = Hit(FLT_MAX, NULL, NULL); // is this supposed to be something more...profound?
             
+            int s_out = img_width - 1;
+            int s_up = img_height - 1;
             // we want it to map from (-1,-1) to (1,1)
-            float x = (2.0/img_width)*(float)i - 1.0;
-            float y = (2.0/img_height)*(float)j - 1.0;
+            float x = (2.0/(float)s_out)*(float)i - 1.0;
+            float y = (2.0/(float)s_up)*(float)j - 1.0;
             Vector2f pixel = Vector2f(x, y);
 
             Ray ray = camera->generateRay(pixel);
@@ -129,7 +131,7 @@ int main( int argc, char* argv[] )
                 }
                 else
                 {
-                    Vector3f color(0,0,0);// we want to iteratively add the light from black
+                    Vector3f light_color(0,0,0);// we want to iteratively add the light from black
                     for (int k = 0; k < parser->getNumLights(); k++)
                     {
                         Light* light = parser->getLight(k);
@@ -138,11 +140,11 @@ int main( int argc, char* argv[] )
                         Vector3f col;
                         float distanceToLight = 10.0;
                         light->getIllumination(p, dir, col, distanceToLight); // what should distance to light actually be?                        
-                        float coeff = Vector3f::dot(hit.getNormal().normalized(), -dir.normalized());
-                        color += material->getDiffuseColor() * col * coeff;
+                        float coeff = Vector3f::dot(hit.getNormal().normalized(), dir.normalized());
+                        light_color += material->getDiffuseColor() * col * coeff;
                                                 
                     }
-                    img->SetPixel(i, j, color);
+                    img->SetPixel(i, j, light_color);
                 }
                                
                 
@@ -153,14 +155,14 @@ int main( int argc, char* argv[] )
                 if (depth_output_filename != NULL)
                 {
                     float d = hit.getT();
-                    d+=1;
-                    d = -d;
+//                    d+=1;
+//                    d = -d;
                     cout << "d = " << d << endl;
                     // if t is within the correct range
                     cout << "depthMin = " << depth_min << ", depth max = " << depth_max << endl;
                     if (d >= depth_min && d <= depth_max)
                     {
-                        float depth_val = (depth_max - d)/(depth_max - depth_min);
+                        float depth_val = (d - depth_min)/(depth_max - depth_min);
                         cout << "depth val = " << depth_val << endl;
                         depth_val = 1-depth_val;
                         depth_img->SetPixel(i, j, Vector3f(depth_val, depth_val, depth_val));
@@ -171,7 +173,8 @@ int main( int argc, char* argv[] )
                 if (normals_output_filename != NULL)
                 {
                     Vector3f normal = hit.getNormal();
-                    normals_img->SetPixel(i, j, -normal); // QUESTION: just color the normal?
+                    Vector3f fab_norm = Vector3f(fabs(normal[0]), fabs(normal[1]), fabs(normal[2]));
+                    normals_img->SetPixel(i, j, fab_norm); // QUESTION: just color the normal?
                 }
                     
             } 
