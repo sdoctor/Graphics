@@ -99,7 +99,7 @@ int main( int argc, char* argv[] )
     Image* normals_img = new Image(img_width, img_height);
     
     cout << "now starting to produce image" << endl;
-    cout << "tmin = " << camera->getTMin();
+    cout << "camera's tmin = " << camera->getTMin() << endl;
     for (int i = 0; i < img_width; i++) 
     {
         for (int j = 0; j < img_height; j++) 
@@ -119,62 +119,15 @@ int main( int argc, char* argv[] )
             // intersect the ray with the high level group for the scene
             if (group->intersect(ray, hit, tmin))
             {
-                // write color of the closest intersected object
-                Material* material = hit.getMaterial();
-                if (parser->getNumLights() == 0)
-                {
-                    Vector3f color = material->getDiffuseColor();
-//                cout << "writing intersect color" << endl;
-                    img->SetPixel(i, j, color); 
-                }
-                else
-                {
-                    Vector3f color(0,0,0);//material->getDiffuseColor();
-                    for (int k = 0; k < parser->getNumLights(); k++)
-                    {
-                        Light* light = parser->getLight(k);
-                        
-//                        Vector3f col = parser.getAmbientLight();
-                        Vector3f p = ray.pointAtParameter(hit.getT());
-                        Vector3f dir;
-                        Vector3f col;
-                        float distanceToLight = 10.0;
-                        light->getIllumination(p, dir, col, distanceToLight); // wht should distance to light actually be?
-                                                cout << "after getIllum: dir = " << dir[0] << dir[1] << dir[2] << endl;
-                        
-                        float coeff = Vector3f::dot(hit.getNormal().normalized(), dir.normalized());
-                        //coeff = 0.1;
-                        color += material->getDiffuseColor() * col * coeff;
-                        
-                        cout << "Coeff: " << coeff << endl;
-                        
-                        //float denom = dir.abs()*hit.getNormal().abs();
-                        //float angle_between = Vector3f::dot(dir, hit.getNormal())/denom;
-//                        angle_between = angle_between*180.0/6.28;
-//                        cout << "angle between = " << angle_between << endl;
-                        
-                        //float to_add = Vector3f::dot(dir, hit.getNormal());
-                       //Vector3f irradiance = angle_between*col;
-                       //cout << "irradiance = " << irradiance[0] << irradiance[1] << irradiance[2] << endl;
-                       
-                       //cout << "to_add = " << to_add << endl;
-                       //color -= Vector3f(to_add/10.0, to_add/10.0, to_add/10.0);
-                    }
-                    img->SetPixel(i, j, color);
-                }
-                               
                 
-                // Visualize Depth (QUESTION: should this be a separate routine?
-                // I don't think so because all of the tests also have depth 
-                // but this can be commented out for testing if it doesn't work...
                 if (depth_output_filename != NULL)
                 {
                     float t = hit.getT();
-                    
+                    cout << "t = " << t << endl;
                     if (t >= depth_min && t <= depth_max)
                     {
                         float depth_val = (depth_max - t)/(depth_max - depth_min);
-//                        cout << "depth_val = " << depth_val << endl;
+                        cout << "depth_val = " << depth_val << endl;
                         // QUESTION: how to make Vector3f of the color?
                         depth_img->SetPixel(i, j, Vector3f(depth_val, depth_val, depth_val));
                     
@@ -185,6 +138,39 @@ int main( int argc, char* argv[] )
                         depth_img->SetPixel(i, j, Vector3f(0,0,0));
                     }
                 }
+                
+                
+                
+                // write color of the closest intersected object
+                Material* material = hit.getMaterial();
+                if (parser->getNumLights() == 0)
+                {
+                    Vector3f color = material->getDiffuseColor();
+                    img->SetPixel(i, j, color); 
+                }
+                else
+                {
+                    Vector3f color(0,0,0);// we want to iteratively add the light from black
+                    for (int k = 0; k < parser->getNumLights(); k++)
+                    {
+                        Light* light = parser->getLight(k);
+                        Vector3f p = ray.pointAtParameter(hit.getT());
+                        Vector3f dir;
+                        Vector3f col;
+                        float distanceToLight = 10.0;
+                        light->getIllumination(p, dir, col, distanceToLight); // what should distance to light actually be?                        
+                        float coeff = Vector3f::dot(hit.getNormal().normalized(), -dir.normalized());
+                        color += material->getDiffuseColor() * col * coeff;
+                                                
+                    }
+                    img->SetPixel(i, j, color);
+                }
+                               
+                
+                // Visualize Depth (QUESTION: should this be a separate routine?
+                // I don't think so because all of the tests also have depth 
+                // but this can be commented out for testing if it doesn't work...
+                
                 
                 if (normals_output_filename != NULL)
                 {

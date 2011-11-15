@@ -44,7 +44,7 @@ Ray OrthographicCamera::generateRay(const Vector2f& point )
               
         
     Vector3f ray_point =  img_center + point.x()*(img_size/2.0)*horiz + point.y()*(img_size/2.0)*up;
-    Ray r = Ray(ray_point, direction);
+    Ray r = Ray(ray_point, -direction);
     return r;
     
 }

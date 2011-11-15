@@ -17,7 +17,7 @@ bool Group::intersect(const Ray& r, Hit& h, float tmin)
        if (objects[i]->intersect(r, h, tmin)) 
        {
            // for debugging - see if it is keeping track of smallest t's
-           cout << "intersection for object " << i << endl;
+//           cout << "intersection for object " << i << endl;
            intersection_times.push_back(h.getT());
        }
        else
@@ -27,7 +27,7 @@ bool Group::intersect(const Ray& r, Hit& h, float tmin)
     }
     if (intersection_times.size() > 0)
     {
-        cout << "number of intersections for the ray =" << intersection_times.size() << endl;
+//        cout << "number of intersections for the ray =" << intersection_times.size() << endl;
         float min_time = -FLT_MAX;
         for (size_t k = 0; k < intersection_times.size(); k++)
         {

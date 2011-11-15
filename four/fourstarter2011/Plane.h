@@ -15,6 +15,9 @@ class Plane : public Object3D
 {
     public:
     Plane(Vector3f normal, float offset, Material* current_material);
+    Vector3f normal;
+    float offset;
+    
     bool intersect( const Ray& r, Hit& h, float tmin );
 };
 

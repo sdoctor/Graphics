@@ -44,7 +44,7 @@ public:
         // direction of the directional light source
         dir = -direction;
         col = color;
-                cout << "in getIllum: col = " << col[0] << col[1] << col[2] << endl;
+//                cout << "in getIllum: col = " << col[0] << col[1] << col[2] << endl;
 
     }
 

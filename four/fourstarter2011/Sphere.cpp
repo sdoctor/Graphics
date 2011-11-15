@@ -32,8 +32,6 @@ bool Sphere::intersect(const Ray& r, Hit& h, float tmin)
    
    //(Ro + t*Rd)^2 - r^2 = 0;
    
-           
-   
    
    // we need to check that the parameterized eqn of t is on surface
    
@@ -97,7 +95,6 @@ bool Sphere::intersect(const Ray& r, Hit& h, float tmin)
        Vector3f Q = Ro + t_curr*Rd;
        Vector3f normal = Q/Q.abs();
        
-       cout << "sphere center = " << center_point[0] << center_point[1] << center_point[2] << endl;
        // update Hit and Material
        h.set(t_curr, mat, normal);
 //       cout << "returning true" << endl;
