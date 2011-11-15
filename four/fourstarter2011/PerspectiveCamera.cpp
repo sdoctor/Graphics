@@ -11,8 +11,8 @@ PerspectiveCamera::PerspectiveCamera(Vector3f center, Vector3f direction, Vector
     Vector3f ortho_up = Vector3f::cross(horiz_vec, direction);
     
     this->direction = direction.normalized();
-    this->up = ortho_up.normalized();
-    this->horiz = horiz_vec.normalized();
+    this->up = -ortho_up.normalized();
+    this->horiz = -horiz_vec.normalized();
     this->angle = angle;
     
     float height_of_screen = 2.00; // from -1 to 1

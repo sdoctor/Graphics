@@ -171,7 +171,7 @@ int main( int argc, char* argv[] )
                 if (normals_output_filename != NULL)
                 {
                     Vector3f normal = hit.getNormal();
-                    normals_img->SetPixel(i, j, normal); // QUESTION: just color the normal?
+                    normals_img->SetPixel(i, j, -normal); // QUESTION: just color the normal?
                 }
                     
             } 
