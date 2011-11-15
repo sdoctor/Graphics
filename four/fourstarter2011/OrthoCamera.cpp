@@ -12,14 +12,14 @@ OrthographicCamera::OrthographicCamera(Vector3f img_center, Vector3f direction, 
 //    OrthoBasis basis = OrthoBasis(img_center, ortho_up, horiz_vec, direction);
 //    
     
-    Vector3f horiz_vec = Vector3f::cross(up_vec, direction);
-    Vector3f ortho_up = Vector3f::cross(direction, horiz_vec);
+    Vector3f horiz_vec = Vector3f::cross(direction, up_vec);
+    Vector3f ortho_up = Vector3f::cross(horiz_vec, direction);
     
     //this->basis = basis;
     this->img_center = img_center;
-    this->up = ortho_up.normalized();
-    this->horiz = horiz_vec.normalized();
-    this->direction = direction.normalized();
+    this->up = -ortho_up.normalized();
+    this->horiz = -horiz_vec.normalized();
+    this->direction = -direction.normalized();
     
     this->tmin = -FLT_MAX;
             
@@ -44,7 +44,7 @@ Ray OrthographicCamera::generateRay(const Vector2f& point )
               
         
     Vector3f ray_point =  img_center + point.x()*(img_size/2.0)*horiz + point.y()*(img_size/2.0)*up;
-    Ray r = Ray(ray_point, -direction);
+    Ray r = Ray(ray_point, direction);
     return r;
     
 }
