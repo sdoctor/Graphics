@@ -119,28 +119,7 @@ int main( int argc, char* argv[] )
             // intersect the ray with the high level group for the scene
             if (group->intersect(ray, hit, tmin))
             {
-                
-                if (depth_output_filename != NULL)
-                {
-                    float t = hit.getT();
-                    cout << "t = " << t << endl;
-                    if (t >= depth_min && t <= depth_max)
-                    {
-                        float depth_val = (depth_max - t)/(depth_max - depth_min);
-                        cout << "depth_val = " << depth_val << endl;
-                        // QUESTION: how to make Vector3f of the color?
-                        depth_img->SetPixel(i, j, Vector3f(depth_val, depth_val, depth_val));
-                    
-                    
-                    }
-                    else 
-                    {
-                        depth_img->SetPixel(i, j, Vector3f(0,0,0));
-                    }
-                }
-                
-                
-                
+                              
                 // write color of the closest intersected object
                 Material* material = hit.getMaterial();
                 if (parser->getNumLights() == 0)
@@ -170,6 +149,23 @@ int main( int argc, char* argv[] )
                 // Visualize Depth (QUESTION: should this be a separate routine?
                 // I don't think so because all of the tests also have depth 
                 // but this can be commented out for testing if it doesn't work...
+                
+                if (depth_output_filename != NULL)
+                {
+                    float d = hit.getT();
+                    d+=1;
+                    d = -d;
+                    cout << "d = " << d << endl;
+                    // if t is within the correct range
+                    float depth_range = (float)depth_max - (float)depth_min;
+                    cout << "depthMin = " << depth_min << ", depth max = " << depth_max << endl;
+                    if (d > (float)depth_min && d <= (float)depth_max)
+                    {
+                        float depth_val = (depth_max - d)/(depth_max - depth_min);;
+                        cout << "depth val = " << depth_val << endl;
+                        depth_img->SetPixel(i, j, Vector3f(depth_val, depth_val, depth_val));
+                    }
+                }
                 
                 
                 if (normals_output_filename != NULL)
