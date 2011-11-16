@@ -27,8 +27,8 @@ int main( int argc, char* argv[] )
     const char* output_filename;
     int depth_min;
     int depth_max;
-    const char* depth_output_filename;
-    const char* normals_output_filename;
+    const char* depth_output_filename = NULL;
+    const char* normals_output_filename = NULL;
     
     cout << "All variables declared in main..." << endl;
 
@@ -123,10 +123,18 @@ int main( int argc, char* argv[] )
                               
                 // write color of the closest intersected object
                 Material* material = hit.getMaterial();
-                cout << "material = " << material << endl;
+                if (material->getDiffuseColor()[0] == 1)
+                {
+                    cout << "color = " << material->getDiffuseColor();
+                }
+//                cout << "material = " << material << endl;
                 if (parser->getNumLights() == 0)
                 {
                     Vector3f color = material->getDiffuseColor();
+                    if (material->getDiffuseColor()[0] == 1)
+                {
+                    cout << "writing color = " << material->getDiffuseColor();
+                }
                     img->SetPixel(i, j, color); 
                 }
                 else
@@ -144,6 +152,10 @@ int main( int argc, char* argv[] )
                         light_color += material->getDiffuseColor() * col * coeff;
                                                 
                     }
+                    if (material->getDiffuseColor()[0] == 1)
+                {
+                    cout << "writing color = " << material->getDiffuseColor();
+                }
                     img->SetPixel(i, j, light_color);
                 }
                                
@@ -157,13 +169,13 @@ int main( int argc, char* argv[] )
                     float d = hit.getT();
 //                    d+=1;
 //                    d = -d;
-                    cout << "d = " << d << endl;
+//                    cout << "d = " << d << endl;
                     // if t is within the correct range
-                    cout << "depthMin = " << depth_min << ", depth max = " << depth_max << endl;
+//                    cout << "depthMin = " << depth_min << ", depth max = " << depth_max << endl;
                     if (d >= depth_min && d <= depth_max)
                     {
                         float depth_val = (d - depth_min)/(depth_max - depth_min);
-                        cout << "depth val = " << depth_val << endl;
+//                        cout << "depth val = " << depth_val << endl;
                         depth_val = 1-depth_val;
                         depth_img->SetPixel(i, j, Vector3f(depth_val, depth_val, depth_val));
                     }
