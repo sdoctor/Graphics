@@ -109,11 +109,10 @@ int main( int argc, char* argv[] )
             float tmin = camera->getTMin();
             Hit hit = Hit(FLT_MAX, NULL, NULL); // is this supposed to be something more...profound?
             
-            int s_out = img_width - 1;
-            int s_up = img_height - 1;
+            
             // we want it to map from (-1,-1) to (1,1)
-            float x = (2.0/(float)s_out)*(float)i - 1.0;
-            float y = (2.0/(float)s_up)*(float)j - 1.0;
+            float x = (2.0/(float)img_width)*(float)i - 1.0;
+            float y = (2.0/(float)img_height)*(float)j - 1.0;
             Vector2f pixel = Vector2f(x, y);
 
             Ray ray = camera->generateRay(pixel);
@@ -124,6 +123,7 @@ int main( int argc, char* argv[] )
                               
                 // write color of the closest intersected object
                 Material* material = hit.getMaterial();
+                cout << "material = " << material << endl;
                 if (parser->getNumLights() == 0)
                 {
                     Vector3f color = material->getDiffuseColor();

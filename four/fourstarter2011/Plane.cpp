@@ -9,7 +9,7 @@ Plane::Plane(Vector3f normal, float offset, Material* current_material) : Object
 
 bool Plane::intersect(const Ray& r, Hit& h, float tMin) {
     
-    Vector3f R0 = r.getOrigin() + Vector3f(offset, offset, offset); 
+    Vector3f R0 = r.getOrigin(); 
     Vector3f Rd = r.getDirection();
     
     
